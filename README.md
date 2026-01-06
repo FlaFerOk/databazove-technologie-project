@@ -14,7 +14,7 @@ Surové dáta sú usporiadané v relačnom modeli, ktorý je znázornený na **e
 <p align="center">
   <img src="https://github.com/FlaFerOk/databazove-technologie-project/blob/main/img/erd_schema.png" alt="ERD Schema">
   <br>
-  <em>Obrázok 1 Entitno-relačná schéma AmazonBooks</em>
+  <em>Obrázok 1 ERD Schema</em>
 </p>
 
 ---
