@@ -31,6 +31,16 @@ Surové dáta sú usporiadané v relačnom modeli, ktorý je znázornený na **e
 ---
 ## **2 Dimenzionálny model**
 
+V tomto projekte bola navrhnutá schéma hviezdy (star schema) podľa Kimballovej metodológie. Model obsahuje jednu tabuľku faktov — fact_shortage_claims, ktorá je prepojená s nasledujúcimi dimenziami:
+- `dim_catalog`: obsahuje podrobné informácie o produktoch, ako sú identifikátor produktu (ASIN), názov produktu, značka, kategória, spoločnosť, krajina pôvodu a dátum uvedenia na trh.
+- `dim_invoice`: obsahuje informácie o faktúrach vrátane čísla faktúry, objednávky, celkovej sumy a dátumu vystavenia.
+- `dim_report`: zahŕňa údaje o reportoch a zdrojových súboroch, z ktorých boli hlásenia o nedostatkoch vytvorené.
+- `dim_date`: obsahuje kalendárne informácie, ako sú deň, deň v týždni, mesiac, rok, týždeň a štvrťrok.
+
+Tabuľka faktov fact_shortage_claims obsahuje merateľné ukazovatele súvisiace s nedostatkami tovaru, ako je množstvo nedostatkov a ich finančný dopad, a zároveň slúži ako centrálny bod pre analytické dotazy.
+
+Štruktúra hviezdicového modelu je znázornená na diagrame nižšie, ktorý zobrazuje vzťahy medzi tabuľkou faktov a jednotlivými dimenziami, čo uľahčuje pochopenie a implementáciu modelu.
+
 <p align="center">
   <img src="https://github.com/FlaFerOk/databazove-technologie-project/blob/main/img/star_schema.png" alt="Star Schema">
   <br>
