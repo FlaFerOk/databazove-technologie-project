@@ -31,7 +31,7 @@ Surové dáta sú usporiadané v relačnom modeli, ktorý je znázornený na **e
 ---
 ## **2 Dimenzionálny model**
 
-V tomto projekte bola navrhnutá schéma hviezdy (star schema) podľa Kimballovej metodológie. Model obsahuje jednu tabuľku faktov — fact_shortage_claims, ktorá je prepojená s nasledujúcimi dimenziami:
+V tomto projekte bola navrhnutá schéma hviezdy (star schema) podľa Kimballovej metodológie. Model obsahuje jednu tabuľku faktov — fact_shortage_claims, ktorej primárnym kľúčom je stĺpec ShortageClaimsID. Táto tabuľka je prepojená s nasledujúcimi dimenziami:
 - `dim_catalog`: obsahuje podrobné informácie o produktoch, ako sú identifikátor produktu (ASIN), názov produktu, značka, kategória, spoločnosť, krajina pôvodu a dátum uvedenia na trh.
 - `dim_invoice`: obsahuje informácie o faktúrach vrátane čísla faktúry, objednávky, celkovej sumy a dátumu vystavenia.
 - `dim_report`: zahŕňa údaje o reportoch a zdrojových súboroch, z ktorých boli hlásenia o nedostatkoch vytvorené.
