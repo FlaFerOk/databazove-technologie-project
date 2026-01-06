@@ -6,6 +6,17 @@ Cieľom je vytvorenie dokumentácie, realizácia a vizualizácia záverečného 
 
 ---
 ## **1. Úvod a popis zdrojových dát**
+V tomto príklade analyzujeme dáta o nedostatkoch tovaru v dodávkach a súvisiacich faktúrach. Cieľom je porozumieť:
+- typom a príčinám nedostatkov tovaru
+- objemu a finančnému dopadu nedostatkov
+- vzťahu medzi faktúrami, produktmi a hláseniami o nedostatkoch
+- trendom v čase a najčastejšie sa opakujúcim problémom v dodávkach
+
+Zo všetkých dostupných tabuliek sme vybrali iba tie, ktoré priamo súvisia s témou našej Star Schema a sú potrebné na analýzu zvoleného biznis procesu:
+- `Catalog` - informácie o produktoch
+- `InvoiceItems` - údaje o faktúrach
+- `ReportInfo` - informácie o reportoch
+- `ShortageClaims` - zaznamenáva reklamácie týkajúce sa nedodaného alebo poškodeného tovaru.
 
 
 ### **ERD diagram**
