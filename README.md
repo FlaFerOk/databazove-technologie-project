@@ -29,6 +29,13 @@ Surové dáta sú usporiadané v relačnom modeli, ktorý je znázornený na **e
 </p>
 
 ---
+## **2 Dimenzionálny model**
+
+<p align="center">
+  <img src="https://github.com/FlaFerOk/databazove-technologie-project/blob/main/img/star_schema.png" alt="Star Schema">
+  <br>
+  <em>Obrázok 2 Star Schema</em>
+</p>
 
 
 
