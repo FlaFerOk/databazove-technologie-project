@@ -104,7 +104,7 @@ CREATE OR REPLACE TABLE shortage_claims_staging(
 );
 ```
 ---
-## **3.2 Transform**
+## **3.2 Load**
 
 Údaje o produktoch (catalog), faktúrach (invoices), reklamáciách na nedostatky tovaru (shortage claims) a reportoch boli načítané z datasetu [**Amazon Vendor Order to Cash - Sample**](https://app.snowflake.com/marketplace/listing/GZTYZTJ3E1/merchant-ai-incorporated-amazon-vendor-order-to-cash-sample?search=Amazon+vendor) do staging tabuliek v Snowflake pomocou príkazu `INSERT INTO`. Nižšie sú uvedené príkazy použité na načítanie dát do jednotlivých staging tabuliek:
 - InvoiceItems:
@@ -189,7 +189,7 @@ JOIN (SELECT *, ROW_NUMBER() OVER (PARTITION BY FileID,SCRS ORDER BY FILEID) as 
 Pri načítaní dát sa používajú spojenia so staging tabuľkami faktúr, katalógu a reportov. Na zabránenie duplicitám sa využíva okenná funkcia `ROW_NUMBER()`, ktorá umožňuje vybrať iba jednu relevantnú verziu záznamu pre každú entitu (InvoiceNumber, ASIN, FileID + SCRs). Výber je realizovaný pomocou podmienky `rn = 1`.
 
 ---
-### **3.3 Transfor**
+## **3.3 Transform**
 
 V rámci transformačnej fázy boli zo staging tabuliek vytvorené tabuľky dimenzií a faktová tabuľka, ktoré spolu tvoria viacrozmerný dátový model typu hviezda (Star Schema). Počas transformácie boli dáta vyčistené, odfiltrované a upravené do štruktúry vhodnej pre analytické dotazy.
 
