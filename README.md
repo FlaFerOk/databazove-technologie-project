@@ -121,6 +121,7 @@ INSERT INTO invoice_items_staging (
     "InvoiceDate"
 FROM AMAZON_VENDOR_ORDER_TO_CASH__SAMPLE.PUBLIC."InvoiceItems";
 ```
+
 - Catalog:
 ```sql
 INSERT INTO catalog_staging (
@@ -144,6 +145,8 @@ INSERT INTO catalog_staging (
 FROM AMAZON_VENDOR_ORDER_TO_CASH__SAMPLE.PUBLIC."Catalog"
 WHERE "ReleaseDate" IS NOT NULL;
 ```
+Z dátového súboru boli odfiltrované záznamy bez informácie v stĺpci ReleaseDate pomocou podmienky WHERE "ReleaseDate" IS NOT NULL.
+
 - ReportInfo:
 ```sql
 INSERT INTO report_info_staging (
@@ -154,6 +157,7 @@ INSERT INTO report_info_staging (
     "SCRs"
 FROM AMAZON_VENDOR_ORDER_TO_CASH__SAMPLE.PUBLIC."ShortageClaims";
 ```
+
 - ShortageClaims:
 ```sql
 INSERT INTO shortage_claims_staging(
