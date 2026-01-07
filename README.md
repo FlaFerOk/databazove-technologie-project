@@ -54,7 +54,7 @@ Dáta boli získané z verejného datasetu [**Amazon Vendor Order to Cash - Samp
 
 Zdrojové tabuľky boli importované z databázy `AMAZON_VENDOR_ORDER_TO_CASH__SAMPLE` a zo schémy `PUBLIC`.
 
-Vytvorenie a naplnenie staging tabuliek:
+Vytvorenie staging tabuliek:
 - InvoiceItems:
 ```sql
 CREATE OR REPLACE TABLE invoice_items_staging (
@@ -64,18 +64,6 @@ CREATE OR REPLACE TABLE invoice_items_staging (
     InvoiceAmount FLOAT,
     InvoiceDate DATE
 );
-
-INSERT INTO invoice_items_staging (
-    InvoiceNumber,
-    PurchaseOrder,
-    InvoiceAmount,
-    InvoiceDate
-) SELECT
-    "InvoiceNumber",
-    "PurchaseOrder",
-    "InvoiceAmount",
-    "InvoiceDate"
-FROM AMAZON_VENDOR_ORDER_TO_CASH__SAMPLE.PUBLIC."InvoiceItems";
 ```
 - Catalog:
 ```sql
@@ -90,7 +78,53 @@ CREATE OR REPLACE TABLE catalog_staging(
     ReleaseDate DATE,
     SoldOnUID VARCHAR(100)
 );
+```
+- ReportInfo:
+```sql
+CREATE OR REPLACE TABLE report_info_staging(
+    ReportID INT AUTOINCREMENT PRIMARY KEY,
+    FileID INT,
+    SCRs VARCHAR(45)
+);
+```
+- ShortageClaims:
+```sql
+CREATE OR REPLACE TABLE shortage_claims_staging(
+    ShortageClaimsID INT PRIMARY KEY,
+    InvoiceID INT,
+    CatalogID INT,
+    ReportID INT,
+    ShortageQty INT,
+    ShortageAmount FLOAT,
+    ShortageType VARCHAR(100),
+    ShortageDate DATE,
+    FOREIGN KEY (InvoiceID) REFERENCES invoice_items_staging(InvoiceID),
+    FOREIGN KEY (CatalogID) REFERENCES catalog_staging(CatalogID),
+    FOREIGN KEY (ReportID) REFERENCES report_info_staging(ReportID)
+);
+```
+---
+## **3.2 Transform**
 
+
+
+Naplnenie staging tabuliek:
+- InvoiceItems:
+```sql
+INSERT INTO invoice_items_staging (
+    InvoiceNumber,
+    PurchaseOrder,
+    InvoiceAmount,
+    InvoiceDate
+) SELECT
+    "InvoiceNumber",
+    "PurchaseOrder",
+    "InvoiceAmount",
+    "InvoiceDate"
+FROM AMAZON_VENDOR_ORDER_TO_CASH__SAMPLE.PUBLIC."InvoiceItems";
+```
+- Catalog:
+```sql
 INSERT INTO catalog_staging (
     ASIN,
     Product,
@@ -114,12 +148,6 @@ WHERE "ReleaseDate" IS NOT NULL;
 ```
 - ReportInfo:
 ```sql
-CREATE OR REPLACE TABLE report_info_staging(
-    ReportID INT AUTOINCREMENT PRIMARY KEY,
-    FileID INT,
-    SCRs VARCHAR(45)
-);
-
 INSERT INTO report_info_staging (
     FileID,
     SCRs
@@ -130,20 +158,6 @@ FROM AMAZON_VENDOR_ORDER_TO_CASH__SAMPLE.PUBLIC."ShortageClaims";
 ```
 - ShortageClaims:
 ```sql
-CREATE OR REPLACE TABLE shortage_claims_staging(
-    ShortageClaimsID INT PRIMARY KEY,
-    InvoiceID INT,
-    CatalogID INT,
-    ReportID INT,
-    ShortageQty INT,
-    ShortageAmount FLOAT,
-    ShortageType VARCHAR(100),
-    ShortageDate DATE,
-    FOREIGN KEY (InvoiceID) REFERENCES invoice_items_staging(InvoiceID),
-    FOREIGN KEY (CatalogID) REFERENCES catalog_staging(CatalogID),
-    FOREIGN KEY (ReportID) REFERENCES report_info_staging(ReportID)
-);
-
 INSERT INTO shortage_claims_staging(
     ShortageClaimsID,
     InvoiceID,
@@ -170,8 +184,5 @@ JOIN (SELECT *, ROW_NUMBER() OVER (PARTITION BY asin ORDER BY RELEASEDATE) as rn
 -- Pripojenie k staging tabuľke reportov, výber len jednej kombinácie FileID + SCRs
 JOIN (SELECT *, ROW_NUMBER() OVER (PARTITION BY FileID,SCRS ORDER BY FILEID) as rn FROM report_info_staging) r ON sc."FileID" = r.fileid AND sc."SCRs" = r.SCRs and r.rn = 1;
 ```
----
-## **3.2 Transform**
-
 
 
