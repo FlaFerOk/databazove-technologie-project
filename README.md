@@ -47,6 +47,52 @@ Tabuľka faktov fact_shortage_claims obsahuje merateľné ukazovatele súvisiace
   <em>Obrázok 2 Star Schema</em>
 </p>
 
+---
 
+```sql
+-- Vytvorenie tabuľky InvoiceItems (staging)
+CREATE OR REPLACE TABLE invoice_items_staging (
+    InvoiceID INT AUTOINCREMENT PRIMARY KEY,
+    InvoiceNumber VARCHAR(25),
+    PurchaseOrder VARCHAR(25),
+    InvoiceAmount FLOAT,
+    InvoiceDate DATE
+);
+
+-- Vytvorenie tabuľky Catalog (staging)
+CREATE OR REPLACE TABLE catalog_staging(
+    CatalogID INT AUTOINCREMENT PRIMARY KEY,
+    ASIN VARCHAR(45),
+    Product VARCHAR(250),
+    Brand VARCHAR(100),
+    CategoryPath VARCHAR(250),
+    Company VARCHAR(100),
+    CountryCode VARCHAR(100),
+    ReleaseDate DATE,
+    SoldOnUID VARCHAR(100)
+);
+
+-- Vytvorenie tabuľky ReportInfo (staging)
+CREATE OR REPLACE TABLE report_info_staging(
+    ReportID INT AUTOINCREMENT PRIMARY KEY,
+    FileID INT,
+    SCRs VARCHAR(45)
+);
+
+-- Vytvorenie tabuľky ShortageClaims (staging)
+CREATE OR REPLACE TABLE shortage_claims_staging(
+    ShortageClaimsID INT PRIMARY KEY,
+    InvoiceID INT,
+    CatalogID INT,
+    ReportID INT,
+    ShortageQty INT,
+    ShortageAmount FLOAT,
+    ShortageType VARCHAR(100),
+    ShortageDate DATE,
+    FOREIGN KEY (InvoiceID) REFERENCES invoice_items_staging(InvoiceID),
+    FOREIGN KEY (CatalogID) REFERENCES catalog_staging(CatalogID),
+    FOREIGN KEY (ReportID) REFERENCES report_info_staging(ReportID)
+);
+```
 
 
