@@ -48,7 +48,7 @@ Tabuľka faktov fact_shortage_claims obsahuje merateľné ukazovatele súvisiace
 </p>
 
 ---
-- Vytvorenie tabuľky InvoiceItems
+- Vytvorenie tabuľky InvoiceItems:
 ```sql
 -- Vytvorenie tabuľky InvoiceItems
 CREATE OR REPLACE TABLE invoice_items_staging (
@@ -59,7 +59,7 @@ CREATE OR REPLACE TABLE invoice_items_staging (
     InvoiceDate DATE
 );
 ```
-- Vytvorenie tabuľky Catalog
+- Vytvorenie tabuľky Catalog:
 ```sql
 -- Vytvorenie tabuľky Catalog
 CREATE OR REPLACE TABLE catalog_staging(
@@ -74,7 +74,7 @@ CREATE OR REPLACE TABLE catalog_staging(
     SoldOnUID VARCHAR(100)
 );
 ```
-- Vytvorenie tabuľky ReportInfo
+- Vytvorenie tabuľky ReportInfo:
 ```sql
 -- Vytvorenie tabuľky ReportInfo
 CREATE OR REPLACE TABLE report_info_staging(
@@ -83,7 +83,7 @@ CREATE OR REPLACE TABLE report_info_staging(
     SCRs VARCHAR(45)
 );
 ```
-- Vytvorenie tabuľky ShortageClaims
+- Vytvorenie tabuľky ShortageClaims:
 ```sql
 CREATE OR REPLACE TABLE shortage_claims_staging(
     ShortageClaimsID INT PRIMARY KEY,
