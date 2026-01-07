@@ -48,9 +48,9 @@ Tabuľka faktov fact_shortage_claims obsahuje merateľné ukazovatele súvisiace
 </p>
 
 ---
-
+- Vytvorenie tabuľky InvoiceItems
 ```sql
--- Vytvorenie tabuľky InvoiceItems (staging)
+-- Vytvorenie tabuľky InvoiceItems
 CREATE OR REPLACE TABLE invoice_items_staging (
     InvoiceID INT AUTOINCREMENT PRIMARY KEY,
     InvoiceNumber VARCHAR(25),
@@ -59,8 +59,9 @@ CREATE OR REPLACE TABLE invoice_items_staging (
     InvoiceDate DATE
 );
 ```
+- Vytvorenie tabuľky Catalog
 ```sql
--- Vytvorenie tabuľky Catalog (staging)
+-- Vytvorenie tabuľky Catalog
 CREATE OR REPLACE TABLE catalog_staging(
     CatalogID INT AUTOINCREMENT PRIMARY KEY,
     ASIN VARCHAR(45),
@@ -73,16 +74,17 @@ CREATE OR REPLACE TABLE catalog_staging(
     SoldOnUID VARCHAR(100)
 );
 ```
+- Vytvorenie tabuľky ReportInfo
 ```sql
--- Vytvorenie tabuľky ReportInfo (staging)
+-- Vytvorenie tabuľky ReportInfo
 CREATE OR REPLACE TABLE report_info_staging(
     ReportID INT AUTOINCREMENT PRIMARY KEY,
     FileID INT,
     SCRs VARCHAR(45)
 );
 ```
+- Vytvorenie tabuľky ShortageClaims
 ```sql
--- Vytvorenie tabuľky ShortageClaims (staging)
 CREATE OR REPLACE TABLE shortage_claims_staging(
     ShortageClaimsID INT PRIMARY KEY,
     InvoiceID INT,
