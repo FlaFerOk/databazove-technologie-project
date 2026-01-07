@@ -390,3 +390,7 @@ ORDER BY total_invoices;
 Dashboard poskytuje prehľad o reklamáciách nedostatkov tovaru, ich finančnom dopade a vývoji v čase. Vizualizácie pomáhajú rýchlo identifikovať hlavné problematické oblasti a podporujú základnú analytickú interpretáciu dát.
 
 ---
+
+**Autori:** Nikita Vladymyrov a Vladyslav Korniienko
+
+---
