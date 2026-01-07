@@ -190,3 +190,16 @@ Pri načítaní dát sa používajú spojenia so staging tabuľkami faktúr, kat
 
 ---
 ### **3.3 Transfor**
+
+
+
+ELT proces v Snowflake umožnil spracovanie pôvodných dát z `.csv` formátu do viacdimenzionálneho modelu typu hviezda. Tento proces zahŕňal čistenie, obohacovanie a reorganizáciu údajov. Výsledný model umožňuje analýzu čitateľských preferencií a správania používateľov, pričom poskytuje základ pre vizualizácie a reporty.
+
+Po úspešnom vytvorení dimenzií a faktovej tabuľky boli dáta nahraté do finálnej štruktúry. Na záver boli staging tabuľky odstránené, aby sa optimalizovalo využitie úložiska:
+```sql
+DROP TABLE IF EXISTS books_staging;
+DROP TABLE IF EXISTS ratings_staging;
+DROP TABLE IF EXISTS users_staging;
+DROP TABLE IF EXISTS occupations_staging;
+DROP TABLE IF EXISTS education_levels_staging;
+```
