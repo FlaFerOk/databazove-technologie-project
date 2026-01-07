@@ -58,7 +58,8 @@ CREATE OR REPLACE TABLE invoice_items_staging (
     InvoiceAmount FLOAT,
     InvoiceDate DATE
 );
-
+```
+```sql
 -- Vytvorenie tabuľky Catalog (staging)
 CREATE OR REPLACE TABLE catalog_staging(
     CatalogID INT AUTOINCREMENT PRIMARY KEY,
@@ -71,14 +72,16 @@ CREATE OR REPLACE TABLE catalog_staging(
     ReleaseDate DATE,
     SoldOnUID VARCHAR(100)
 );
-
+```
+```sql
 -- Vytvorenie tabuľky ReportInfo (staging)
 CREATE OR REPLACE TABLE report_info_staging(
     ReportID INT AUTOINCREMENT PRIMARY KEY,
     FileID INT,
     SCRs VARCHAR(45)
 );
-
+```
+```sql
 -- Vytvorenie tabuľky ShortageClaims (staging)
 CREATE OR REPLACE TABLE shortage_claims_staging(
     ShortageClaimsID INT PRIMARY KEY,
