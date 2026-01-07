@@ -106,9 +106,7 @@ CREATE OR REPLACE TABLE shortage_claims_staging(
 ---
 ## **3.2 Transform**
 
-
-
-Naplnenie staging tabuliek:
+Údaje o produktoch (catalog), faktúrach (invoices), reklamáciách na nedostatky tovaru (shortage claims) a reportoch boli načítané z datasetu Amazon Vendor Order to Cash Sample do staging tabuliek v Snowflake pomocou príkazu `INSERT INTO`. Nižšie sú uvedené príkazy použité na načítanie dát do jednotlivých staging tabuliek:
 - InvoiceItems:
 ```sql
 INSERT INTO invoice_items_staging (
