@@ -48,9 +48,11 @@ Tabuľka faktov fact_shortage_claims obsahuje merateľné ukazovatele súvisiace
 </p>
 
 ---
-- Vytvorenie tabuľky InvoiceItems:
+## **3.1 Extract**
+
+Vytvorenie a naplnenie staging tabuliek:
+- InvoiceItems:
 ```sql
--- Vytvorenie tabuľky InvoiceItems
 CREATE OR REPLACE TABLE invoice_items_staging (
     InvoiceID INT AUTOINCREMENT PRIMARY KEY,
     InvoiceNumber VARCHAR(25),
@@ -58,10 +60,21 @@ CREATE OR REPLACE TABLE invoice_items_staging (
     InvoiceAmount FLOAT,
     InvoiceDate DATE
 );
+
+INSERT INTO invoice_items_staging (
+    InvoiceNumber,
+    PurchaseOrder,
+    InvoiceAmount,
+    InvoiceDate
+) SELECT
+    "InvoiceNumber",
+    "PurchaseOrder",
+    "InvoiceAmount",
+    "InvoiceDate"
+FROM AMAZON_VENDOR_ORDER_TO_CASH__SAMPLE.PUBLIC."InvoiceItems";
 ```
-- Vytvorenie tabuľky Catalog:
+- Catalog:
 ```sql
--- Vytvorenie tabuľky Catalog
 CREATE OR REPLACE TABLE catalog_staging(
     CatalogID INT AUTOINCREMENT PRIMARY KEY,
     ASIN VARCHAR(45),
@@ -73,17 +86,45 @@ CREATE OR REPLACE TABLE catalog_staging(
     ReleaseDate DATE,
     SoldOnUID VARCHAR(100)
 );
+
+INSERT INTO catalog_staging (
+    ASIN,
+    Product,
+    Brand,
+    CategoryPath,
+    Company,
+    CountryCode,
+    ReleaseDate,
+    SoldOnUID
+)SELECT 
+    "ASIN",
+    "Product",
+    "Brand",
+    "CategoryPath",
+    "Company",
+    "CountryCode",
+    "ReleaseDate",
+    "SoldOnUID"
+FROM AMAZON_VENDOR_ORDER_TO_CASH__SAMPLE.PUBLIC."Catalog"
+WHERE "ReleaseDate" IS NOT NULL;
 ```
-- Vytvorenie tabuľky ReportInfo:
+- ReportInfo:
 ```sql
--- Vytvorenie tabuľky ReportInfo
 CREATE OR REPLACE TABLE report_info_staging(
     ReportID INT AUTOINCREMENT PRIMARY KEY,
     FileID INT,
     SCRs VARCHAR(45)
 );
+
+INSERT INTO report_info_staging (
+    FileID,
+    SCRs
+) SELECT 
+    "FileID",
+    "SCRs"
+FROM AMAZON_VENDOR_ORDER_TO_CASH__SAMPLE.PUBLIC."ShortageClaims";
 ```
-- Vytvorenie tabuľky ShortageClaims:
+- ShortageClaims:
 ```sql
 CREATE OR REPLACE TABLE shortage_claims_staging(
     ShortageClaimsID INT PRIMARY KEY,
@@ -98,6 +139,32 @@ CREATE OR REPLACE TABLE shortage_claims_staging(
     FOREIGN KEY (CatalogID) REFERENCES catalog_staging(CatalogID),
     FOREIGN KEY (ReportID) REFERENCES report_info_staging(ReportID)
 );
+
+INSERT INTO shortage_claims_staging(
+    ShortageClaimsID,
+    InvoiceID,
+    CatalogID,
+    ReportID,
+    ShortageQty,
+    ShortageAmount,
+    ShortageType,
+    ShortageDate
+)SELECT
+    ROW_NUMBER() OVER (ORDER BY sc."InvoiceNumber"), 
+    i.InvoiceID,
+    c.CatalogID,
+    r.reportID,
+    sc."ShortageQty",
+    sc."ShortageAmount",
+    sc."ShortageType",
+    sc."ReportDate"
+FROM AMAZON_VENDOR_ORDER_TO_CASH__SAMPLE.PUBLIC."ShortageClaims" sc
+-- Pripojenie k staging tabuľke faktúr, výber len jednej verzie na základe dátumu  
+JOIN (SELECT *, ROW_NUMBER() OVER (PARTITION BY InvoiceNumber ORDER BY InvoiceDate) as rn FROM invoice_items_staging) i ON sc."InvoiceNumber" = i.invoicenumber and i.rn = 1
+-- Pripojenie k staging tabuľke produktov, výber len jednej verzie na základe dátumu
+JOIN (SELECT *, ROW_NUMBER() OVER (PARTITION BY asin ORDER BY RELEASEDATE) as rn FROM catalog_staging) c ON sc."ASIN" = c.asin and c.rn = 1
+-- Pripojenie k staging tabuľke reportov, výber len jednej kombinácie FileID + SCRs
+JOIN (SELECT *, ROW_NUMBER() OVER (PARTITION BY FileID,SCRS ORDER BY FILEID) as rn FROM report_info_staging) r ON sc."FileID" = r.fileid AND sc."SCRs" = r.SCRs and r.rn = 1;
 ```
 
 
