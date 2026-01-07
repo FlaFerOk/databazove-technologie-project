@@ -304,10 +304,10 @@ Dashboard obsahuje 6 vizualizácií, ktoré poskytujú základný prehľad o kľ
 </p>
 
 ---
-
+### **Graf 1: Produkty, ktoré boli najčastejšie predmetom reklamácií (top 10)**
+Graf zobrazuje produkty, pri ktorých bol zaznamenaný najvyšší počet reklamácií. Pomáha identifikovať tovary, ktoré najčastejšie spôsobujú problémy pri dodávkach.
 
 ```sql
--- Graf 1: Produkty, ktoré boli najčastejšie predmetom reklamácií (top 10)
 SELECT 
     c.Product as product_name,
     COUNT(f.shortageclaimsID) as total_claims
@@ -318,9 +318,10 @@ ORDER BY total_claims DESC
 LIMIT 10;
 ```
 ---
+### **Graf 2: Celková hodnota reklamácii podľa značky**
+Vizualizácia zobrazuje celkovú finančnú hodnotu reklamácií pre jednotlivé značky. Umožňuje zistiť, ktoré značky majú najväčší finančný dopad z dôvodu nedostatkov.
 
 ```sql
--- Graf 2: Celková hodnota reklamácii podľa značky
 SELECT 
     c.Brand,
     ROUND(SUM(f.ShortageAmount), 2) as total_shortage_amount
@@ -330,9 +331,10 @@ GROUP BY c.Brand
 ORDER BY total_shortage_amount;
 ```
 ---
+### **Graf 3: Počet reklamácií podľa rokov**
+Graf ukazuje, ako sa počet reklamácií menil v priebehu rokov. Pomáha identifikovať trendy a vývoj problémov v čase.
 
 ```sql
--- Graf 3: Počet reklamácií podľa rokov
 SELECT 
     d.year,
     COUNT(f.ShortageClaimsID) as total_claims
@@ -342,9 +344,10 @@ GROUP BY d.year
 ORDER BY d.year;
 ```
 ---
+### **Graf 4: Počet reklamácií podľa krajín**
+Vizualizácia zobrazuje rozdelenie reklamácií podľa krajín pôvodu produktov. Umožňuje určiť, z ktorých krajín pochádza najviac problémových dodávok.
 
 ```sql
--- Graf 4: Počet reklamácií podľa krajín
 SELECT
  c.CountryCode,
  COUNT(f.ShortageClaimsID) AS total_claims
@@ -354,9 +357,10 @@ GROUP BY c.CountryCode
 ORDER BY total_claims DESC;
 ```
 ---
+### **Graf 5: Priemerná hodnota reklamácie podľa faktúry**
+Graf zobrazuje priemernú finančnú hodnotu reklamácií pre jednotlivé faktúry. Pomáha identifikovať faktúry s najvyšším finančným dopadom.
 
 ```sql
--- Graf 5: Priemerná hodnota reklamácie podľa faktúry
 SELECT 
     i.InvoiceNumber,
     ROUND(AVG(f.ShortageAmount), 2) AS avg_shortage_amount,
@@ -368,9 +372,10 @@ ORDER BY avg_shortage_amount
 LIMIT 15;
 ```
 ---
+### **Graf 6: Počet faktúr pre jednotlivé spoločnosti**
+Vizualizácia zobrazuje počet faktúr pre jednotlivé spoločnosti. Umožňuje lepšie pochopiť, ktoré spoločnosti sa najčastejšie vyskytujú v dátach.
 
 ```sql
--- Graf 6: Počet faktúr pre jednotlivé spoločnosti
 SELECT 
     c.Company as company_name,
     COUNT(i.InvoiceID) as total_invoices
