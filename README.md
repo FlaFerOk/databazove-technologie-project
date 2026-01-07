@@ -290,3 +290,6 @@ DROP TABLE IF EXISTS catalog_staging;
 DROP TABLE IF EXISTS report_info_staging;
 DROP TABLE IF EXISTS shortage_claims_staging;
 ```
+
+---
+## **4 Vizualizácia dát**
