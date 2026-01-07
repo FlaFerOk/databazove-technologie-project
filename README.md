@@ -192,6 +192,7 @@ Pri načítaní dát sa používajú spojenia so staging tabuľkami faktúr, kat
 ## **3.3 Transform**
 
 V rámci transformačnej fázy boli zo staging tabuliek vytvorené tabuľky dimenzií a faktová tabuľka, ktoré spolu tvoria viacrozmerný dátový model typu hviezda (Star Schema). Počas transformácie boli dáta vyčistené, odfiltrované a upravené do štruktúry vhodnej pre analytické dotazy.
+
 ---
 Dimenzná tabuľka `dim_catalog` bola vytvorená na základe tabuľky `catalog_staging` a obsahuje informácie o produktoch, vrátane ASIN, názvu produktu, značky, kategórie, spoločnosti, krajiny pôvodu, dátumu vydania a identifikátora predajcu. V rámci čistenia dát boli odfiltrované záznamy, ktoré neobsahovali hodnotu v stĺpci `ReleaseDate`, keďže dátum vydania je povinným atribútom pre ďalšiu analýzu.
 ```sql
