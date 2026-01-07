@@ -293,3 +293,9 @@ DROP TABLE IF EXISTS shortage_claims_staging;
 
 ---
 ## **4 Vizualizácia dát**
+
+<p align="center">
+  <img src="https://github.com/FlaFerOk/databazove-technologie-project/blob/main/img/vizualizacia.png" alt="Vizualizacia">
+  <br>
+  <em>Obrázok 3 Vizualizacia</em>
+</p>
