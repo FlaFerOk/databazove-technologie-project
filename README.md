@@ -170,5 +170,8 @@ JOIN (SELECT *, ROW_NUMBER() OVER (PARTITION BY asin ORDER BY RELEASEDATE) as rn
 -- Pripojenie k staging tabuľke reportov, výber len jednej kombinácie FileID + SCRs
 JOIN (SELECT *, ROW_NUMBER() OVER (PARTITION BY FileID,SCRS ORDER BY FILEID) as rn FROM report_info_staging) r ON sc."FileID" = r.fileid AND sc."SCRs" = r.SCRs and r.rn = 1;
 ```
+---
+## **3.2 Transform**
+
 
 
