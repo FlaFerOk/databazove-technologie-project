@@ -192,7 +192,7 @@ Pri načítaní dát sa používajú spojenia so staging tabuľkami faktúr, kat
 ## **3.3 Transform**
 
 V rámci transformačnej fázy boli zo staging tabuliek vytvorené tabuľky dimenzií a faktová tabuľka, ktoré spolu tvoria viacrozmerný dátový model typu hviezda (Star Schema). Počas transformácie boli dáta vyčistené, odfiltrované a upravené do štruktúry vhodnej pre analytické dotazy.
-
+---
 Dimenzná tabuľka `dim_catalog` bola vytvorená na základe tabuľky `catalog_staging` a obsahuje informácie o produktoch, vrátane ASIN, názvu produktu, značky, kategórie, spoločnosti, krajiny pôvodu, dátumu vydania a identifikátora predajcu. V rámci čistenia dát boli odfiltrované záznamy, ktoré neobsahovali hodnotu v stĺpci `ReleaseDate`, keďže dátum vydania je povinným atribútom pre ďalšiu analýzu.
 ```sql
 CREATE OR REPLACE TABLE dim_catalog AS (
@@ -210,7 +210,7 @@ CREATE OR REPLACE TABLE dim_catalog AS (
     WHERE ReleaseDate IS NOT NULL
 );
 ```
-
+---
 Dimenzná tabuľka `dim_invoice` bola vytvorená z tabuľky `invoice_items_staging` a zahŕňa údaje o faktúrach, ako je číslo faktúry, číslo objednávky, suma faktúry a dátum vystavenia. Táto tabuľka sa používa na analýzu finančných aspektov nedostatkov tovaru.
 ```sql
 CREATE OR REPLACE TABLE dim_invoice AS (
@@ -223,7 +223,7 @@ CREATE OR REPLACE TABLE dim_invoice AS (
  FROM invoice_items_staging its
 );
 ```
-
+---
 Dimenzná tabuľka `dim_date` bola vytvorená na základe jedinečných hodnôt dátumu nedostatku (`ShortageDate`) z tabuľky `shortage_claims_staging`. Obsahuje kalendárne atribúty, vrátane dňa, dňa v týždni, mesiaca, roka, týždňa a štvrťroka. Táto tabuľka umožňuje časovú analýzu a sledovanie vývoja nedostatkov v čase. Záznamy s chýbajúcou hodnotou dátumu boli z procesu spracovania vylúčené.
 ```sql
 CREATE OR REPLACE TABLE dim_date AS (
@@ -243,7 +243,7 @@ CREATE OR REPLACE TABLE dim_date AS (
         )
 );
 ```
-
+---
 Dimenzná tabuľka `dim_report` obsahuje informácie o reportoch a zdrojových súboroch, vrátane identifikátorov reportov (`ReportID`), súborov (`FileID`) a súvisiacich ukazovateľov (`SCRs`). Tieto údaje sa používajú na prepojenie nedostatkov s konkrétnymi reportovacími zdrojmi.
 ```sql
 CREATE OR REPLACE TABLE dim_report AS (
@@ -254,7 +254,7 @@ CREATE OR REPLACE TABLE dim_report AS (
     FROM report_info_staging
 );
 ```
-
+---
 Faktová tabuľka `fact_shortage_claims` bola vytvorená na základe tabuľky `shortage_claims_staging` a prepája údaje so všetkými dimenznými tabuľkami. Obsahuje jedinečný identifikátor reklamácie, odkazy na dimenzie produktov, faktúr, dátumov a reportov, ako aj kľúčové metriky, ako sú množstvo nedodaného tovaru, hodnota nedostatku a typ reklamácie. Okrem toho bola pomocou okennej funkcie vypočítaná kumulatívna suma nedostatkov pre každú faktúru, čo umožňuje analyzovať celkový finančný dopad nedostatkov v čase.
 ```sql
 CREATE OR REPLACE TABLE fact_shortage_claims AS (
@@ -276,7 +276,7 @@ CREATE OR REPLACE TABLE fact_shortage_claims AS (
     JOIN dim_date d ON s.ShortageDate = d.date       -- Pripojenie na základe dátumov
 );
 ```
-
+---
 Týmto spôsobom transformačná fáza zabezpečila prípravu konzistentnej a vyčistenej dátovej štruktúry optimalizovanej na analytické spracovanie a tvorbu reportov v rámci modelu Star Schema.
 
 V rámci študentského projektu bolo rozhodnuté používať prevažne SCD typu 0, keďže analýza je zameraná na aktuálny stav referenčných údajov a neexistuje požiadavka na uchovávanie historických zmien.
