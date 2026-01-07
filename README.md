@@ -145,7 +145,7 @@ INSERT INTO catalog_staging (
 FROM AMAZON_VENDOR_ORDER_TO_CASH__SAMPLE.PUBLIC."Catalog"
 WHERE "ReleaseDate" IS NOT NULL;
 ```
-Z dátového súboru boli odfiltrované záznamy bez informácie v stĺpci ReleaseDate pomocou podmienky WHERE "ReleaseDate" IS NOT NULL.
+Z dátového súboru boli odfiltrované záznamy bez informácie v stĺpci `ReleaseDate` pomocou podmienky `WHERE "ReleaseDate" IS NOT NULL`.
 
 - ReportInfo:
 ```sql
