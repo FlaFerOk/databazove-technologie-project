@@ -281,6 +281,8 @@ Týmto spôsobom transformačná fáza zabezpečila prípravu konzistentnej a vy
 
 V rámci študentského projektu bolo rozhodnuté používať prevažne SCD typu 0, keďže analýza je zameraná na aktuálny stav referenčných údajov a neexistuje požiadavka na uchovávanie historických zmien.
 
+ELT proces v Snowflake umožnil spracovanie dát z datasetu [**Amazon Vendor Order to Cash - Sample**](https://app.snowflake.com/marketplace/listing/GZTYZTJ3E1/merchant-ai-incorporated-amazon-vendor-order-to-cash-sample?search=Amazon+vendor) a ich transformáciu do schémy typu Star Schema. V rámci procesu boli dáta zo schémy `AMAZON_VENDOR_ORDER_TO_CASH__SAMPLE.PUBLIC` načítané do staging tabuliek, po čom nasledovalo čistenie a transformácia. Výsledkom je hviezdicový model s dimenziami `dim_catalog`, `dim_invoice`, `dim_date`, `dim_report` a faktovou tabuľkou `fact_shortage_claims`. Vytvorený model umožňuje analyzovať nedostatky tovaru, ich finančný dopad a vývoj v čase a zároveň slúži ako základ pre tvorbu vizualizácií a reportov.
+
 Po úspešnom vytvorení dimenzií a faktovej tabuľky boli dáta nahraté do finálnej štruktúry. Na záver boli staging tabuľky odstránené, aby sa optimalizovalo využitie úložiska:
 ```sql
 DROP TABLE IF EXISTS invoice_items_staging;
