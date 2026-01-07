@@ -173,18 +173,18 @@ INSERT INTO shortage_claims_staging(
     ROW_NUMBER() OVER (ORDER BY sc."InvoiceNumber"), 
     i.InvoiceID,
     c.CatalogID,
-    r.reportID,
+    r.ReportID,
     sc."ShortageQty",
     sc."ShortageAmount",
     sc."ShortageType",
     sc."ReportDate"
 FROM AMAZON_VENDOR_ORDER_TO_CASH__SAMPLE.PUBLIC."ShortageClaims" sc
 -- Pripojenie k staging tabuľke faktúr, výber len jednej verzie na základe dátumu  
-JOIN (SELECT *, ROW_NUMBER() OVER (PARTITION BY InvoiceNumber ORDER BY InvoiceDate) as rn FROM invoice_items_staging) i ON sc."InvoiceNumber" = i.invoicenumber and i.rn = 1
+JOIN (SELECT *, ROW_NUMBER() OVER (PARTITION BY InvoiceNumber ORDER BY InvoiceDate) as rn FROM invoice_items_staging) i ON sc."InvoiceNumber" = i.InvoiceNumber and i.rn = 1
 -- Pripojenie k staging tabuľke produktov, výber len jednej verzie na základe dátumu
-JOIN (SELECT *, ROW_NUMBER() OVER (PARTITION BY asin ORDER BY RELEASEDATE) as rn FROM catalog_staging) c ON sc."ASIN" = c.asin and c.rn = 1
+JOIN (SELECT *, ROW_NUMBER() OVER (PARTITION BY ASIN ORDER BY ReleaseDate) as rn FROM catalog_staging) c ON sc."ASIN" = c.ASIN and c.rn = 1
 -- Pripojenie k staging tabuľke reportov, výber len jednej kombinácie FileID + SCRs
-JOIN (SELECT *, ROW_NUMBER() OVER (PARTITION BY FileID,SCRS ORDER BY FILEID) as rn FROM report_info_staging) r ON sc."FileID" = r.fileid AND sc."SCRs" = r.SCRs and r.rn = 1;
+JOIN (SELECT *, ROW_NUMBER() OVER (PARTITION BY FileID, SCRs ORDER BY FileID) as rn FROM report_info_staging) r ON sc."FileID" = r.FileID AND sc."SCRs" = r.SCRs and r.rn = 1;
 ```
 Pri načítaní dát sa používajú spojenia so staging tabuľkami faktúr, katalógu a reportov. Na zabránenie duplicitám sa využíva okenná funkcia `ROW_NUMBER()`, ktorá umožňuje vybrať iba jednu relevantnú verziu záznamu pre každú entitu (InvoiceNumber, ASIN, FileID + SCRs). Výber je realizovaný pomocou podmienky `rn = 1`.
 
@@ -200,13 +200,13 @@ CREATE OR REPLACE TABLE dim_catalog AS (
     SELECT 
         CatalogID,    
         ASIN,
-        product,
-        brand, 
-        categorypath, 
-        company,
-        countrycode, 
-        releasedate, 
-        soldonuid 
+        Product,
+        Brand, 
+        CategoryPath, 
+        Company,
+        CountryCode, 
+        ReleaseDate, 
+        SoldOnUID
     FROM catalog_staging 
     WHERE ReleaseDate IS NOT NULL
 );
@@ -263,17 +263,17 @@ CREATE OR REPLACE TABLE fact_shortage_claims AS (
         s.ShortageClaimsID,  -- Unikátne ID reklamácie
         i.InvoiceID,         -- Pripojenie s dimenziou faktúr
         c.CatalogID,         -- Pripojenie s dimenziou produktov
-        d.dateid,            -- Pripojenie s dimenziou dátumov
+        d.DateID,            -- Pripojenie s dimenziou dátumov
         r.ReportID,          -- Pripojenie s dimenziou reportov
-        s.shortageqty,       -- Množstvo nedodaného tovaru podľa danej reklamácie
-        s.shortageamount,    -- Finančná hodnota nedodávky v peňažnom vyjadrení
-        s.shortagetype,      -- Typ reklamácie
-        SUM(s.SHORTAGEAMOUNT) OVER (PARTITION BY s.InvoiceID ORDER BY d.dateid, s.shortageclaimsid) as CumulativeShortageAmount
+        s.ShortageQty,       -- Množstvo nedodaného tovaru podľa danej reklamácie
+        s.ShortageAmount,    -- Finančná hodnota nedodávky v peňažnom vyjadrení
+        s.ShortageType,      -- Typ reklamácie
+        SUM(s.SHORTAGEAMOUNT) OVER (PARTITION BY s.InvoiceID ORDER BY d.DateID, s.ShortageClaimsID) as CumulativeShortageAmount -- Kumulatívna suma reklamácií pre faktúru v čase
     FROM shortage_claims_staging s
 
     JOIN dim_invoice i ON i.InvoiceID = s.InvoiceID  -- Pripojenie na základe faktúr
-    JOIN dim_catalog c ON s.catalogid = c.catalogid  -- Pripojenie na základe produktov
-    JOIN dim_report r ON r.reportid = s.reportid     -- Pripojenie na základe reportov
+    JOIN dim_catalog c ON s.CatalogID = c.CatalogID  -- Pripojenie na základe produktov
+    JOIN dim_report r ON r.ReportID = s.ReportID     -- Pripojenie na základe reportov
     JOIN dim_date d ON s.ShortageDate = d.date       -- Pripojenie na základe dátumov
 );
 ```
