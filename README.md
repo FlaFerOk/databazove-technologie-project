@@ -294,6 +294,8 @@ DROP TABLE IF EXISTS shortage_claims_staging;
 ---
 ## **4 Vizualizácia dát**
 
+Dashboard obsahuje 6 vizualizácií, ktoré poskytujú základný prehľad o kľúčových metrikách a trendoch súvisiacich s reklamáciami nedostatkov tovaru. Vizualizácie odpovedajú na dôležité otázky a pomáhajú lepšie pochopiť, ktoré produkty a značky sú najproblematickejšie, aký je finančný dopad reklamácií, ako sa reklamácie vyvíjajú v čase a ako sa líšia podľa krajín, faktúr a spoločností.
+
 <p align="center">
   <img src="https://github.com/FlaFerOk/databazove-technologie-project/blob/main/img/vizualizacia.png" alt="Vizualizacia">
   <br>
