@@ -304,6 +304,8 @@ Dashboard obsahuje 6 vizualizácií, ktoré poskytujú základný prehľad o kľ
 </p>
 
 ---
+
+
 ```sql
 -- Graf 1: Produkty, ktoré boli najčastejšie predmetom reklamácií (top 10)
 SELECT 
@@ -317,7 +319,6 @@ LIMIT 10;
 ```
 ---
 
----
 ```sql
 -- Graf 2: Celková hodnota reklamácii podľa značky
 SELECT 
@@ -330,7 +331,6 @@ ORDER BY total_shortage_amount;
 ```
 ---
 
----
 ```sql
 -- Graf 3: Počet reklamácií podľa rokov
 SELECT 
@@ -343,7 +343,6 @@ ORDER BY d.year;
 ```
 ---
 
----
 ```sql
 -- Graf 4: Počet reklamácií podľa krajín
 SELECT
@@ -356,7 +355,6 @@ ORDER BY total_claims DESC;
 ```
 ---
 
----
 ```sql
 -- Graf 5: Priemerná hodnota reklamácie podľa faktúry
 SELECT 
@@ -371,7 +369,6 @@ LIMIT 15;
 ```
 ---
 
----
 ```sql
 -- Graf 6: Počet faktúr pre jednotlivé spoločnosti
 SELECT 
