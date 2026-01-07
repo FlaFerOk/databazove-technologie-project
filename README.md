@@ -1,4 +1,4 @@
-# ELT proces datasetu Amazon Vendor Order to Cash - Sample
+# **ELT proces datasetu Amazon Vendor Order to Cash - Sample**
 
 Tento dataset sme si vybrali, pretože sa nám zdal zaujímavý a dobre zodpovedal zadaniu. Tento repozitár predstavuje ukážkovú implementáciu ELT procesu v Snowflake a vytvorenie dátového skladu so schémou Star Schema. Projekt pracuje s [**Amazon Vendor Order to Cash - Sample**](https://app.snowflake.com/marketplace/listing/GZTYZTJ3E1/merchant-ai-incorporated-amazon-vendor-order-to-cash-sample?search=Amazon+vendor) datasetom. Cieľom projektu je vytvoriť funkčnú databázu na analýzu a spracovanie reklamácií týkajúcich sa nedostatku tovaru v dodávkach pre marketplace.
 
@@ -49,6 +49,10 @@ Tabuľka faktov fact_shortage_claims obsahuje merateľné ukazovatele súvisiace
 
 ---
 ## **3.1 Extract**
+
+Dáta boli získané z verejného datasetu [**Amazon Vendor Order to Cash - Sample**](https://app.snowflake.com/marketplace/listing/GZTYZTJ3E1/merchant-ai-incorporated-amazon-vendor-order-to-cash-sample?search=Amazon+vendor), ktorý je dostupný v Snowflake Marketplace. Dataset je poskytovaný vo forme hotovej databázy a schémy obsahujúcej tabuľky súvisiace s objednávkami, faktúrami, reklamáciami nedostatkov. 
+
+Zdrojové tabuľky boli importované z databázy `AMAZON_VENDOR_ORDER_TO_CASH__SAMPLE` a zo schémy `PUBLIC`.
 
 Vytvorenie a naplnenie staging tabuliek:
 - InvoiceItems:
